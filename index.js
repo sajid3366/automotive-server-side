@@ -40,15 +40,15 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/product/update/:id', async(req, res)=>{
+        app.get('/product/update/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id : new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const car = await carCollection.findOne(query)
             res.send(car)
         })
 
-        
-        
+
+
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
@@ -86,7 +86,37 @@ async function run() {
 
         })
 
-        // thi
+        // this is for add cart
+
+
+        app.get('/carcart', async (req, res) => {
+            const cursor = cartCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.get('/carcart/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: new ObjectId(id) }
+            const car = await cartCollection.findOne(query)
+            res.send(car)
+        })
+
+        app.post('/carcart', async (req, res) => {
+            const newProduct = req.body;
+            console.log(newProduct);
+            const result = await cartCollection.insertOne(newProduct);
+            res.send(result)
+        })
+
+        app.delete('/carcart/:id', async (req, res) => {
+            const id = req.params.id;
+            const carquery = { _id: id };
+            const result = await cartCollection.deleteOne(carquery);
+            res.send(result)
+
+        })
 
 
 
