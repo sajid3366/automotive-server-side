@@ -30,6 +30,7 @@ async function run() {
 
         const userCollection = client.db('carhantDB').collection('user');
         const carCollection = client.db('carhantDB').collection('car')
+        const cartCollection = client.db('carhantDB').collection('cart')
 
 
 
@@ -38,20 +39,16 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result)
         })
-        app.get('/product/:brand', async (req, res) => {
-            const brand = req.params.brand
-            const query = { brand: brand }
-            const result = await carCollection.find(query).toArray()
-            res.send(result)
+
+        app.get('/product/update/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)}
+            const car = await carCollection.findOne(query)
+            res.send(car)
         })
 
-        app.get('/product/:id', async (req, res) => {
-            const id = req.params.id;
-            console.log(id);
-            const query = { _id: new ObjectId(id) }
-            const result = await carCollection.findOne(query);
-            res.send(result)
-        })
+        
+        
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
@@ -60,26 +57,36 @@ async function run() {
             res.send(result)
         })
 
-        // app.put('/product/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const updatedCar = req.body;
-        //     const filter = { _id: new ObjectId(id) }
-        //     const options = { upsert: true };
-        //     const car = {
-        //         $set: {
-        //             name: updatedCar.name,
-        //             brand: updatedCar.brand,
-        //             type: updatedCar.type,
-        //             price: updatedCar.price,
-        //             description: updatedCar.description,
-        //             rating: updatedCar.rating,
-        //             photo: updatedCar.photo
-        //         }
-        //     }
-        //     const result = await carCollection.updateOne(filter, car, options)
-        //     res.send(result);
+        app.get('/product/:brand', async (req, res) => {
+            const brand = req.params.brand
+            const query = { brand: brand }
+            const result = await carCollection.find(query).toArray()
+            res.send(result)
+        })
 
-        // })
+
+        app.put('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedCar = req.body;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const car = {
+                $set: {
+                    name: updatedCar.name,
+                    brand: updatedCar.brand,
+                    type: updatedCar.type,
+                    price: updatedCar.price,
+                    description: updatedCar.description,
+                    rating: updatedCar.rating,
+                    photo: updatedCar.photo
+                }
+            }
+            const result = await carCollection.updateOne(filter, car, options)
+            res.send(result);
+
+        })
+
+        // thi
 
 
 
