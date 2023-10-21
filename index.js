@@ -8,9 +8,6 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-// 0TC2zduR3ASj24jq
-// automotiveCarHant
-
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.l9mlnno.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -26,7 +23,6 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
 
         const userCollection = client.db('carhantDB').collection('user');
         const carCollection = client.db('carhantDB').collection('car')
@@ -47,12 +43,8 @@ async function run() {
             res.send(car)
         })
 
-
-
-
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
-            console.log(newProduct);
             const result = await carCollection.insertOne(newProduct);
             res.send(result)
         })
@@ -97,7 +89,6 @@ async function run() {
 
         app.get('/carcart/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id);
             const query = { _id: new ObjectId(id) }
             const car = await cartCollection.findOne(query)
             res.send(car)
@@ -105,7 +96,6 @@ async function run() {
 
         app.post('/carcart', async (req, res) => {
             const newProduct = req.body;
-            console.log(newProduct);
             const result = await cartCollection.insertOne(newProduct);
             res.send(result)
         })
@@ -131,7 +121,6 @@ async function run() {
 
         app.post('/user', async (req, res) => {
             const newUser = req.body;
-            console.log(newUser);
             const result = await userCollection.insertOne(newUser);
             res.send(result)
         })
@@ -149,7 +138,6 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    // console.log("server is running");
     res.send('server is runnig')
 })
 
